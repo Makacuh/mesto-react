@@ -1,15 +1,13 @@
-import React from 'react';
+import { useEffect, useState } from "react";
 import api from "../utils/api.js";
 import Card from "./Card";
 
 function Main(props) {
-  
-
-  const [userName, setUserName] = React.useState('Загрузка');
-  const [userProfile, setUserProfile] = React.useState('Информации');
-  const [userAvatar, setUserAvatar] = React.useState("");
-  const [cards, setCards] = React.useState([]);
-  React.useEffect(() => {
+  const [userName, setUserName] = useState();
+  const [userProfile, setUserProfile] = useState();
+  const [userAvatar, setUserAvatar] = useState();
+  const [cards, setCards] = useState([]);
+  useEffect(() => {
     api
       .getInitialCards()
       .then((data) => {
@@ -26,7 +24,7 @@ function Main(props) {
         console.log(error);
       });
 
-      api
+    api
       .getUserInfo()
       .then((data) => {
         setUserName(data.name);
@@ -62,7 +60,7 @@ function Main(props) {
               aria-label="Редактировать"
             ></button>
           </div>
-          <p className="profile__subtitle"></p>
+          <p className="profile__subtitle">{userProfile}</p>
         </div>
         <button
           type="button"
@@ -74,15 +72,15 @@ function Main(props) {
 
       <section>
         <ul className="elements">
-        {cards.map((card) => (
-          <Card
-            src={card.src}
-            name={card.name}
-            key={card.keyId}
-            likes={card.likes}
-            onCardClick={props.onCardClick}
-          />
-        ))}
+          {cards.map((card) => (
+            <Card
+              src={card.src}
+              name={card.name}
+              key={card.keyId}
+              likes={card.likes}
+              onCardClick={props.onCardClick}
+            />
+          ))}
         </ul>
       </section>
     </main>

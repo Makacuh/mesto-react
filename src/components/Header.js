@@ -6,7 +6,7 @@ function Header(props) {
     <header className="header">
       <img className="header__logo" src={logo}></img>
     </header>
-  )
+  );
 }
 
 export default Header;

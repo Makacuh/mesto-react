@@ -1,4 +1,4 @@
-import React from "react";
+import {useState} from 'react';
 import "../App.css";
 import Header from "./Header";
 import Main from "./Main";
@@ -8,10 +8,14 @@ import PopupWithForm from "./PopupWithForm";
 
 export default function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+    useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
+    useState(false);
+  const [selectedCard, setSelectedCard] = useState({
+    name: "",
+    link: "",
+  });
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -25,10 +29,15 @@ export default function App() {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
   }
 
+  function handleCardClick(card) {
+    setSelectedCard({ name: card.name, link: card.link });
+  }
+
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setSelectedCard({ name: "", link: "" });
   }
 
   return (
@@ -39,6 +48,7 @@ export default function App() {
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
+        onCardClick={handleCardClick}
       />
 
       <Footer />
@@ -86,7 +96,7 @@ export default function App() {
           minLength="2"
           placeholder="Введите ваше имя"
         />
-        <span classname="popup__error-message input-popup-title-error"></span>
+        <span className="popup__error-message input-popup-title-error"></span>
 
         <input
           className="popup__input"
@@ -130,25 +140,7 @@ export default function App() {
         <span className="popup__error-message card-link-error"></span>
       </PopupWithForm>
 
-      <ImagePopup />
-
-      <template className="element-template">
-        <li class="element">
-          <img className="element__image" src="#" alt="" />
-          <div className="element__info">
-            <h2 className="element__title"></h2>
-            <div className="element__like-container">
-              <button type="button" class="element__like"></button>
-              <span className="element__likes-counter">0</span>
-            </div>
-            <button
-              className="element__btn-trash"
-              type="button"
-              title="Удалить"
-            ></button>
-          </div>
-        </li>
-      </template>
+      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
     </div>
   );
 }
