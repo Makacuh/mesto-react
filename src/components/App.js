@@ -41,7 +41,7 @@ export default function App() {
   }
 
   return (
-    <div className="page">
+    <>
       <Header />
 
       <Main
@@ -141,6 +141,6 @@ export default function App() {
       </PopupWithForm>
 
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-    </div>
+    </>
   );
 }

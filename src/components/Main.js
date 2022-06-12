@@ -46,7 +46,7 @@ function Main(props) {
           <button
             type="button"
             onClick={props.onEditAvatar}
-            class="profile__avatar-button"
+            className="profile__avatar-button"
           ></button>
         </div>
 
