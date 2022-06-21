@@ -28,16 +28,9 @@ class Api {
     }).then(this._parseResponse);
   }
 
-  setLike(cardId) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
-      method: "PUT",
-      headers: this._headers,
-    }).then(this._parseResponse);
-  }
-
-  deleteLike(cardId) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
-      method: "DELETE",
+  toggleLike(id, methodApi) {
+    return fetch(`${this._url}/cards/${id}/likes`, {
+      method: methodApi,
       headers: this._headers,
     }).then(this._parseResponse);
   }
