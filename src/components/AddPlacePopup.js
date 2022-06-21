@@ -5,6 +5,17 @@ function AddPlacePopup({ isAddPlacePopupOpen, closeAllPopups, onSubmit }) {
   const [name, setName] = React.useState("");
   const [link, setLink] = React.useState("");
 
+  React.useEffect(() => {
+    setName('');
+    setLink('');
+    }, [isAddPlacePopupOpen])
+
+    function handleSubmit(e) {
+        e.preventDefault();
+      
+        onSubmit({name: name, link: link});
+      } 
+
   return (
     <PopupWithForm
       title="Новое место"
@@ -12,10 +23,7 @@ function AddPlacePopup({ isAddPlacePopupOpen, closeAllPopups, onSubmit }) {
       buttonText='Создать'
       isOpen={isAddPlacePopupOpen}
       onClose={closeAllPopups}
-      onSubmit={() => {
-        console.log(name)
-        onSubmit({ name, link });
-      }}
+      onSubmit={handleSubmit}
     >
       <input
         onChange={(event) => {

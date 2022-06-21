@@ -45,17 +45,7 @@ export default function App() {
       });
   }
 
-  useEffect(() => {
-    api
-      .getInitialCards()
 
-      .then((cards) => {
-        setCards(cards);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
 
   useEffect(() => {
     api
@@ -65,6 +55,15 @@ export default function App() {
       })
       .catch((error) => {
         console.log(error);
+      });
+      api
+      .getInitialCards()
+
+      .then((cards) => {
+        setCards(cards);
+      })
+      .catch((err) => {
+        console.error(err);
       });
   }, []);
 
@@ -96,7 +95,10 @@ export default function App() {
 
     api.toggleLike(card._id, isLiked ? "DELETE" : "PUT").then((newCard) => {
       setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   function handleDeleteClick(card) {
@@ -144,7 +146,6 @@ export default function App() {
         name="confirm"
         title="Вы уверены?"
         buttonText="Да"
-        isOpen={false}
         onClose={closeAllPopups}
       ></PopupWithForm>
 

@@ -5,8 +5,8 @@ export default function ImagePopup({ card, onClose }) {
         <figure className="popup__figure">
           <img
             className="popup__image"
-            src={card ? card.link : ""}
-            alt={card ? card.name : ""}
+            src={card?.link}
+            alt={card?.name}
           />
           <figcaption className="popup__figcaption">
             {card ? card.name : ""}
