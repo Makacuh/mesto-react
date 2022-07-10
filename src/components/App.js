@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -9,14 +10,27 @@ import CurrentUserContext from "../contexts/CurrentUserContext";
 import EditAvatarPopup from "./EditAvatarPopup";
 import EditProfilePopup from "./EditProfilePopup";
 import AddPlacePopup from "./AddPlacePopup";
+import Login from "./Login";
+import Register from "./Register";
+import ProtectedRoute from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
+import * as auth from "../utils/auth";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [cards, setCards] = useState([]);
+  const [userEmail, setUserEmail] = useState("");
+  const [currentPath, setCurrentPath] = useState("/");
+  const navigate = useNavigate();
+  const [isInfoTooltipOpen, setInfoTooltipOpen] = useState({
+    opened: false,
+    success: false,
+  });
 
   function handleUpdateUser({ name, about }) {
     api
@@ -128,19 +142,126 @@ export default function App() {
       });
   }
 
+  const handlePathChange = (newPath) => {
+    setCurrentPath(newPath);
+  };
+
+  // Проверка токена:
+  useEffect(() => {
+    auth
+      .tokenCheck(localStorage.getItem("token"))
+      .then((result) => {
+        if (result) {
+          setUserEmail(result.data.email);
+          setLoggedIn(true);
+          navigate("/");
+          setCurrentPath("/");
+        } else {
+          throw new Error(
+            "Ошибка текущего сеанса. Необходимо заново авторизироваться"
+          );
+        }
+      })
+      .catch((err) => {
+        console.log(`Ошибка входа по токену ${err}`);
+        navigate("/sign-in");
+      });
+  }, []);
+
+  // Обработчик завершения:
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUserEmail("");
+    setLoggedIn(false);
+    navigate("/sign-in");
+    setCurrentPath("/sign-in");
+  };
+
+  // Обработчик регистрации:
+  const handleSignupSubmit = (email, password) => {
+    auth
+      .register(email, password)
+      .then((result) => {
+        if (result) {
+          setUserEmail(result.data.email);
+          setInfoTooltipOpen({ opened: true, success: true });
+          setLoggedIn(true);
+          navigate("/sign-in");
+          setCurrentPath("/sign-in");
+        } else {
+          throw new Error("Не удалось пройти регистрацию");
+        }
+      })
+      .catch((err) => {
+        console.log(`Ошибка регистрацииЖ ${err}`);
+        setInfoTooltipOpen({ opened: true, success: false });
+      });
+  };
+
+  // Обработчик авторизации:
+  const handleSigninSubmit = (email, password) => {
+    auth
+      .authorization(email, password)
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          setUserEmail(email);
+          setLoggedIn(true);
+          navigate("/");
+          setCurrentPath("/");
+        } else {
+          throw new Error("Не удалось получить токен от сервера");
+        }
+      })
+      .catch((err) => {
+        console.log(
+          alert(`Ошибка авторизации ${err}. Проверьте корректность данных`)
+        );
+      });
+  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header />
-
-      <Main
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onEditAvatar={handleEditAvatarClick}
-        onCardClick={handleCardClick}
-        cards={cards}
-        onCardLike={handleCardLike}
-        onCardDelete={handleDeleteClick}
+      <Header
+        userEmail={userEmail}
+        onLogout={handleLogout}
+        path={currentPath}
       />
+
+      <Routes>
+        <Route
+          path="/sign-in"
+          element={
+            <Login
+              onSignin={handleSigninSubmit}
+              onPathChange={handlePathChange}
+            />
+          }
+        />
+        <Route
+          path="/sign-up"
+          element={
+            <Register
+              onSignup={handleSignupSubmit}
+              onPathChange={handlePathChange}
+            />
+          }
+        />
+
+       <Route element={ <ProtectedRoute
+          path="/"
+          loggedIn={loggedIn}
+          component={Main}
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onEditAvatar={handleEditAvatarClick}
+          onCardClick={handleCardClick}
+          cards={cards}
+          onCardLike={handleCardLike}
+          onCardDelete={handleDeleteClick}
+        />}
+        />
+      </Routes>
 
       <Footer />
 

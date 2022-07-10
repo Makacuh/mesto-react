@@ -1,4 +1,4 @@
-.login__item {
+.form__item {
     background-color: black;
     max-width: 358px;
     width: 358px;
@@ -12,7 +12,7 @@
     color: white;
   }
   
-  .login__item:focus {
+  .form__item:focus {
     outline: none;
   }
   

@@ -1,4 +1,4 @@
-.login__link {
+.form__link {
     font-size: 1rem;
     color: #fff;
     text-decoration: none;
@@ -8,6 +8,6 @@
     transition: opacity .5s ease;
   }
   
-  .login__link:hover {
+  .form__link:hover {
   opacity: .6;
   }
