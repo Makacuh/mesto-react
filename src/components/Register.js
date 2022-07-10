@@ -11,10 +11,12 @@ const Register = ({ onRegister }) => {
 
   return (
     <>
-      <div className="auth">
-        <h2 className="auth__title">Регистрация</h2>
-        <form className="form auth__form" onSubmit={handleSubmit}>
+      <div className="form">
+        
+        <form className="form" onSubmit={handleSubmit}>
+        <h1 className="form__title">Регистрация</h1>
           <input
+          className="form__item" 
             id="email"
             name="email"
             type="email"
@@ -24,8 +26,8 @@ const Register = ({ onRegister }) => {
             onChange={handleChange}
             required
           />
-          <span className="auth__error">{errors.email}</span>
           <input
+          className="form__item" 
             id="password"
             name="password"
             type="password"
@@ -36,13 +38,13 @@ const Register = ({ onRegister }) => {
             onChange={handleChange}
             required
           />
-          <span className="auth__error">{errors.password}</span>
-          <button type="submit">Зарегистрироваться</button>
+  
+          <button type="submit" className='form__button'>Зарегистрироваться</button>
         </form>
       </div>
-      <Link to="/sign-in" className="auth__login-hint">
-        Уже зарегистрированы? Войти
-      </Link>
+      <p className="form__caption">Уже зарегистрированы? 
+      <Link className="form__link" to="/sign-in">Войти</Link>
+      </p>
     </>
   );
 };

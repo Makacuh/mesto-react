@@ -27,10 +27,9 @@ export default function App() {
   const [userEmail, setUserEmail] = useState("");
   const [currentPath, setCurrentPath] = useState("/");
   const navigate = useNavigate();
-  const [isInfoTooltipOpen, setInfoTooltipOpen] = useState({
-    opened: false,
-    success: false,
-  });
+  const [isInfoTooltipOpen, setInfoTooltipOpen] = useState(false);
+  const [isRegistrationSuccessful, setIsRegistrationSuccessful] =
+    useState(false);
 
   function handleUpdateUser({ name, about }) {
     api
@@ -86,6 +85,10 @@ export default function App() {
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
   }
+
+  const openInfoTooltip = () => {
+    setInfoTooltipOpen(true);
+  };
 
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
@@ -168,7 +171,7 @@ export default function App() {
       });
   }, []);
 
-  // Обработчик завершения:
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUserEmail("");
@@ -177,28 +180,23 @@ export default function App() {
     setCurrentPath("/sign-in");
   };
 
-  // Обработчик регистрации:
-  const handleSignupSubmit = (email, password) => {
-    auth
-      .register(email, password)
-      .then((result) => {
-        if (result) {
-          setUserEmail(result.data.email);
-          setInfoTooltipOpen({ opened: true, success: true });
-          setLoggedIn(true);
-          navigate("/sign-in");
-          setCurrentPath("/sign-in");
-        } else {
-          throw new Error("Не удалось пройти регистрацию");
-        }
+ 
+  const handleSignupSubmit = (data) => {
+    return auth
+      .register(data)
+      .then((data) => {
+        setIsRegistrationSuccessful(true);
+        openInfoTooltip();
+        navigate('/sign-in');
       })
       .catch((err) => {
-        console.log(`Ошибка регистрацииЖ ${err}`);
-        setInfoTooltipOpen({ opened: true, success: false });
+        console.log(err);
+        setIsRegistrationSuccessful(false);
+        openInfoTooltip();
       });
   };
 
-  // Обработчик авторизации:
+  
   const handleSigninSubmit = (email, password) => {
     auth
       .authorization(email, password)
@@ -241,10 +239,7 @@ export default function App() {
         <Route
           path="/sign-up"
           element={
-            <Register
-              onSignup={handleSignupSubmit}
-              onPathChange={handlePathChange}
-            />
+            <Register onRegister={handleSignupSubmit} />
           }
         />
 
@@ -264,6 +259,13 @@ export default function App() {
       </Routes>
 
       <Footer />
+
+      <InfoTooltip
+        
+        onClose={closeAllPopups}
+        isOpen={isInfoTooltipOpen}
+        isSuccess={isRegistrationSuccessful}
+      />
 
       <PopupWithForm
         name="confirm"
