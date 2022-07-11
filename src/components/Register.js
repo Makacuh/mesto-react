@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import useForm from '../hooks/useForm';
+import { Link } from "react-router-dom";
+import useForm from "../hooks/useForm";
 
 const Register = ({ onRegister }) => {
   const { enteredValues, errors, handleChange } = useForm();
@@ -12,11 +12,10 @@ const Register = ({ onRegister }) => {
   return (
     <>
       <div className="form">
-        
         <form className="form" onSubmit={handleSubmit}>
-        <h1 className="form__title">Регистрация</h1>
+          <h1 className="form__title">Регистрация</h1>
           <input
-          className="form__item" 
+            className="form__item"
             id="email"
             name="email"
             type="email"
@@ -27,7 +26,7 @@ const Register = ({ onRegister }) => {
             required
           />
           <input
-          className="form__item" 
+            className="form__item"
             id="password"
             name="password"
             type="password"
@@ -38,12 +37,17 @@ const Register = ({ onRegister }) => {
             onChange={handleChange}
             required
           />
-  
-          <button type="submit" className='form__button'>Зарегистрироваться</button>
+
+          <button type="submit" className="form__button">
+            Зарегистрироваться
+          </button>
         </form>
       </div>
-      <p className="form__caption">Уже зарегистрированы? 
-      <Link className="form__link" to="/sign-in">Войти</Link>
+      <p className="form__caption">
+        Уже зарегистрированы?
+        <Link className="form__link" to="/sign-in">
+          Войти
+        </Link>
       </p>
     </>
   );

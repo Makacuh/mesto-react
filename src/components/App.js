@@ -149,7 +149,6 @@ export default function App() {
     setCurrentPath(newPath);
   };
 
-  // Проверка токена:
   useEffect(() => {
     auth
       .tokenCheck(localStorage.getItem("token"))
@@ -171,7 +170,6 @@ export default function App() {
       });
   }, []);
 
-  
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUserEmail("");
@@ -180,14 +178,13 @@ export default function App() {
     setCurrentPath("/sign-in");
   };
 
- 
   const handleSignupSubmit = (data) => {
     return auth
       .register(data)
       .then((data) => {
         setIsRegistrationSuccessful(true);
         openInfoTooltip();
-        navigate('/sign-in');
+        navigate("/sign-in");
       })
       .catch((err) => {
         console.log(err);
@@ -196,7 +193,6 @@ export default function App() {
       });
   };
 
-  
   const handleSigninSubmit = (email, password) => {
     auth
       .authorization(email, password)
@@ -238,30 +234,30 @@ export default function App() {
         />
         <Route
           path="/sign-up"
-          element={
-            <Register onRegister={handleSignupSubmit} />
-          }
+          element={<Register onRegister={handleSignupSubmit} />}
         />
 
-       <Route element={ <ProtectedRoute
-          path="/"
-          loggedIn={loggedIn}
-          component={Main}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleDeleteClick}
-        />}
+        <Route
+          element={
+            <ProtectedRoute
+              path="/"
+              loggedIn={loggedIn}
+              component={Main}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleDeleteClick}
+            />
+          }
         />
       </Routes>
 
       <Footer />
 
       <InfoTooltip
-        
         onClose={closeAllPopups}
         isOpen={isInfoTooltipOpen}
         isSuccess={isRegistrationSuccessful}

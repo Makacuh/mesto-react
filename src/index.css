@@ -5,6 +5,10 @@
 
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo/header__logo.css);
+@import url(./blocks/header/__link/header__link.css);
+@import url(./blocks/header/__link/_exit/header__link_exit.css);
+@import url(./blocks/header/__link/_mail/header__link_mail.css);
+@import url(./blocks/header/__menu/header__menu.css);
 
 @import url(./blocks/form/form.css);
 @import url(./blocks/form/__button/form__button.css);
