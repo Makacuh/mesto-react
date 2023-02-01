@@ -69,7 +69,6 @@ export default function App() {
       });
     api
       .getInitialCards()
-
       .then((cards) => {
         setCards(cards);
       })
@@ -216,6 +215,7 @@ export default function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
+      
       <Header
         userEmail={userEmail}
         onLogout={handleLogout}
@@ -232,15 +232,17 @@ export default function App() {
             />
           }
         />
+        
         <Route
           path="/sign-up"
           element={<Register onRegister={handleSignupSubmit} />}
         />
 
         <Route
+        path="/"
           element={
             <ProtectedRoute
-              path="/"
+              
               loggedIn={loggedIn}
               component={Main}
               onEditProfile={handleEditProfileClick}
@@ -250,6 +252,7 @@ export default function App() {
               cards={cards}
               onCardLike={handleCardLike}
               onCardDelete={handleDeleteClick}
+          
             />
           }
         />

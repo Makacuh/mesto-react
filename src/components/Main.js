@@ -11,8 +11,8 @@ function Main({
   onCardLike,
   onCardDelete,
 }) {
+  
   const { name, about, avatar } = useContext(CurrentUserContext);
-
   return (
     <main>
       <section className="profile">

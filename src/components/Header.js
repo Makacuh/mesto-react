@@ -13,7 +13,6 @@ function Header(props) {
   const handleLogout = () => {
     props.onLogout();
   };
-  console.log(props.path);
 
   return (
     <header className="header">
